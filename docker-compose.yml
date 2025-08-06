@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  ai-devops:
+    build: .
+    container_name: ai-devops-assistant
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./config:/app/.ai_devops
+      - ./reports:/app/reports
+    environment:
+      - AI_DEVOPS_ENV=production
+      - AI_DEVOPS_LOG_LEVEL=INFO
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/api/metrics"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  ai-devops-monitor:
+    build: .
+    container_name: ai-devops-monitor
+    volumes:
+      - ./config:/app/.ai_devops
+      - ./reports:/app/reports
+    command: ["ai-devops", "monitor", "--duration", "0", "--interval", "60"]
+    environment:
+      - AI_DEVOPS_ENV=production
+      - AI_DEVOPS_LOG_LEVEL=INFO
+    restart: unless-stopped
+    depends_on:
+      - ai-devops
+
+networks:
+  default:
+    name: ai-devops-network

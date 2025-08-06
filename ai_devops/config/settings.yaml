@@ -1,0 +1,185 @@
+# AI DevOps Assistant Settings
+version: "1.0.0"
+
+# General application settings
+general:
+  debug: false
+  log_level: "INFO"
+  max_workers: 4
+  timeout: 30
+  retry_attempts: 3
+
+# GitHub integration settings
+github:
+  api_version: "2022-11-28"
+  timeout: 30
+  max_retries: 3
+  rate_limit_buffer: 0.1
+  webhook_secret: null
+  
+# Exchange monitoring settings  
+exchanges:
+  update_interval: 30  # seconds
+  price_alert_threshold: 5.0  # percentage
+  connection_timeout: 10
+  max_reconnect_attempts: 5
+  backoff_multiplier: 2.0
+  
+# AI analysis settings
+ai:
+  analysis_timeout: 300  # 5 minutes
+  max_file_size_mb: 10
+  supported_languages:
+    - python
+    - javascript
+    - typescript
+    - java
+    - go
+    - rust
+    - solidity
+    - move
+  
+  # Security analysis rules
+  security_rules:
+    api_key_detection: true
+    sql_injection_check: true
+    xss_vulnerability_check: true
+    hardcoded_secrets: true
+    insecure_crypto: true
+    
+  # Exchange-specific analysis
+  exchange_analysis:
+    rate_limiting_check: true
+    api_error_handling: true
+    websocket_reconnection: true
+    order_validation: true
+    balance_verification: true
+
+# Monitoring settings
+monitoring:
+  workflow_check_interval: 300  # 5 minutes
+  pr_check_interval: 180  # 3 minutes
+  exchange_check_interval: 60  # 1 minute
+  health_check_timeout: 10
+  
+  # Notification settings
+  notifications:
+    email: false
+    slack: false
+    discord: false
+    telegram: false
+    
+  # Alert thresholds
+  alerts:
+    workflow_failure_rate: 10  # percentage
+    exchange_downtime_minutes: 5
+    api_error_rate: 15  # percentage
+    response_time_seconds: 5
+
+# Dashboard settings
+dashboard:
+  refresh_interval: 30  # seconds
+  chart_data_points: 100
+  theme: "light"  # light, dark, auto
+  language: "en"  # en, fa
+  timezone: "UTC"
+  
+  # Persian/Farsi support
+  localization:
+    rtl_support: true
+    persian_calendar: false
+    persian_numerals: false
+    
+  # Chart settings
+  charts:
+    price_history_hours: 24
+    performance_metrics_days: 7
+    real_time_updates: true
+
+# Reporting settings
+reports:
+  retention_days: 90
+  auto_cleanup: true
+  include_sensitive_data: false
+  
+  # Export formats
+  formats:
+    json: true
+    html: true
+    pdf: false
+    csv: true
+    
+  # Report sections
+  sections:
+    executive_summary: true
+    workflow_analysis: true
+    exchange_performance: true
+    security_findings: true
+    recommendations: true
+
+# Performance settings
+performance:
+  cache_enabled: true
+  cache_ttl_seconds: 300
+  max_memory_mb: 1024
+  parallel_processing: true
+  batch_size: 100
+
+# Security settings
+security:
+  encrypt_at_rest: true
+  secure_headers: true
+  rate_limiting: true
+  ip_whitelist: []
+  
+  # API security
+  api_security:
+    cors_origins: ["http://localhost:8080"]
+    max_request_size_mb: 50
+    rate_limit_per_minute: 1000
+    
+  # Audit logging
+  audit:
+    enabled: true
+    log_sensitive_operations: true
+    retention_days: 365
+
+# Development settings
+development:
+  hot_reload: false
+  debug_toolbar: false
+  mock_exchanges: false
+  test_mode: false
+  
+# Logging configuration
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file_rotation: true
+  max_file_size_mb: 100
+  backup_count: 5
+  
+  # Log destinations
+  destinations:
+    console: true
+    file: true
+    syslog: false
+    
+# Feature flags
+features:
+  real_time_monitoring: true
+  exchange_integration: true
+  ai_analysis: true
+  github_integration: true
+  dashboard_ui: true
+  cli_interface: true
+  api_server: true
+  notifications: false
+  reporting: true
+  
+# Experimental features
+experimental:
+  ml_predictions: false
+  advanced_charting: false
+  multi_language_analysis: false
+  custom_indicators: false
