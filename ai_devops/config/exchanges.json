@@ -1,0 +1,167 @@
+{
+  "exchanges": {
+    "binance": {
+      "name": "Binance",
+      "type": "international", 
+      "api_base_url": "https://api.binance.com",
+      "testnet_base_url": "https://testnet.binance.vision",
+      "websocket_url": "wss://stream.binance.com:9443/ws",
+      "testnet_websocket_url": "wss://testnet.binance.vision/ws",
+      "rate_limits": {
+        "requests_per_minute": 1200,
+        "orders_per_second": 10,
+        "orders_per_day": 200000
+      },
+      "supported_features": [
+        "spot_trading",
+        "futures_trading", 
+        "options_trading",
+        "margin_trading",
+        "lending",
+        "staking"
+      ],
+      "required_credentials": ["api_key", "api_secret"],
+      "optional_credentials": ["passphrase"]
+    },
+    "coinbase": {
+      "name": "Coinbase Pro",
+      "type": "international",
+      "api_base_url": "https://api.exchange.coinbase.com",
+      "sandbox_base_url": "https://api-public.sandbox.exchange.coinbase.com",
+      "websocket_url": "wss://ws-feed.exchange.coinbase.com",
+      "sandbox_websocket_url": "wss://ws-feed-public.sandbox.exchange.coinbase.com",
+      "rate_limits": {
+        "requests_per_minute": 600,
+        "orders_per_second": 5
+      },
+      "supported_features": [
+        "spot_trading",
+        "advanced_trading"
+      ],
+      "required_credentials": ["api_key", "api_secret", "passphrase"],
+      "optional_credentials": []
+    },
+    "wallex": {
+      "name": "Wallex",
+      "type": "iranian",
+      "api_base_url": "https://api.wallex.ir",
+      "websocket_url": "wss://ws.wallex.ir",
+      "rate_limits": {
+        "requests_per_minute": 600,
+        "orders_per_second": 2
+      },
+      "supported_features": [
+        "spot_trading",
+        "rial_gateway"
+      ],
+      "required_credentials": ["api_key", "api_secret"],
+      "optional_credentials": [],
+      "documentation": "https://docs.wallex.ir/",
+      "locale": "fa-IR"
+    },
+    "bitpin": {
+      "name": "Bitpin",
+      "type": "iranian", 
+      "api_base_url": "https://api.bitpin.org",
+      "websocket_url": "wss://ws.bitpin.org",
+      "rate_limits": {
+        "requests_per_minute": 300,
+        "orders_per_second": 1
+      },
+      "supported_features": [
+        "spot_trading",
+        "rial_gateway",
+        "p2p_trading"
+      ],
+      "required_credentials": ["api_key", "api_secret"],
+      "optional_credentials": [],
+      "documentation": "https://bitpin.org/api-docs/",
+      "locale": "fa-IR"
+    },
+    "nobitex": {
+      "name": "Nobitex",
+      "type": "iranian",
+      "api_base_url": "https://api.nobitex.ir",
+      "rate_limits": {
+        "requests_per_minute": 1000,
+        "orders_per_second": 3
+      },
+      "supported_features": [
+        "spot_trading",
+        "rial_gateway",
+        "instant_trading"
+      ],
+      "required_credentials": ["api_key", "api_secret"],
+      "optional_credentials": ["username", "password"],
+      "documentation": "https://apidocs.nobitex.ir/",
+      "locale": "fa-IR"
+    }
+  },
+  "trading_pairs": {
+    "international": {
+      "major_pairs": [
+        "BTC/USDT", "ETH/USDT", "BNB/USDT", "XRP/USDT", "ADA/USDT",
+        "SOL/USDT", "DOT/USDT", "DOGE/USDT", "AVAX/USDT", "LUNA/USDT"
+      ],
+      "stable_pairs": [
+        "USDT/USD", "USDC/USD", "BUSD/USD", "DAI/USD"
+      ]
+    },
+    "iranian": {
+      "rial_pairs": [
+        "BTC/IRT", "ETH/IRT", "LTC/IRT", "XRP/IRT", "ADA/IRT",
+        "BNB/IRT", "DOT/IRT", "DOGE/IRT", "TRX/IRT", "USDT/IRT"
+      ],
+      "toman_pairs": [
+        "BTC/TMN", "ETH/TMN", "USDT/TMN"
+      ]
+    }
+  },
+  "monitoring": {
+    "health_check_endpoints": {
+      "binance": "/api/v3/ping",
+      "coinbase": "/",
+      "wallex": "/v1/currencies/stats",
+      "bitpin": "/v1/currencies/",
+      "nobitex": "/market/stats"
+    },
+    "status_indicators": [
+      "api_response_time",
+      "websocket_connection",
+      "order_execution_time",
+      "data_freshness"
+    ],
+    "alert_thresholds": {
+      "response_time_ms": 5000,
+      "connection_timeout_s": 30,
+      "data_age_minutes": 5
+    }
+  },
+  "security": {
+    "ip_whitelist_required": ["coinbase"],
+    "mandatory_2fa": ["binance", "coinbase"],
+    "api_permissions": {
+      "required": ["read"],
+      "optional": ["trade", "withdraw"],
+      "recommended": ["read", "trade"]
+    },
+    "encryption": {
+      "algorithm": "AES-256-GCM",
+      "key_derivation": "PBKDF2"
+    }
+  },
+  "localization": {
+    "iranian_exchanges": {
+      "currency_symbol": "ریال",
+      "decimal_separator": ".",
+      "thousands_separator": ",",
+      "rtl_support": true,
+      "persian_numerals": false
+    },
+    "international_exchanges": {
+      "currency_symbol": "$",
+      "decimal_separator": ".",
+      "thousands_separator": ","
+    }
+  }
+}

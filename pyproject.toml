@@ -1,0 +1,104 @@
+[build-system]
+requires = ["setuptools>=45", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ai-devops-assistant"
+version = "1.0.0"
+description = "Comprehensive AI-powered DevOps assistant with cryptocurrency exchange integration"
+authors = [
+    {name = "AI DevOps Team", email = "devops@example.com"}
+]
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.8"
+keywords = ["devops", "ai", "cryptocurrency", "monitoring", "automation"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: System :: Monitoring",
+    "Topic :: Office/Business :: Financial",
+]
+dependencies = [
+    "click>=8.0.0",
+    "asyncio>=3.4.3",
+    "aiohttp>=3.8.0",
+    "websockets>=10.0",
+    "pydantic>=2.0.0",
+    "pyyaml>=6.0",
+    "requests>=2.28.0",
+    "python-dotenv>=1.0.0",
+    "flask>=2.3.0",
+    "flask-cors>=4.0.0",
+    "pandas>=2.0.0",
+    "numpy>=1.24.0",
+    "ccxt>=4.0.0",
+    "python-binance>=1.0.0",
+    "openai>=1.0.0",
+    "anthropic>=0.25.0",
+    "PyGithub>=1.59.0",
+    "cryptography>=41.0.0",
+    "keyring>=24.0.0",
+    "prometheus-client>=0.17.0",
+    "structlog>=23.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-asyncio>=0.21.0",
+    "black>=23.0.0",
+    "flake8>=6.0.0",
+    "mypy>=1.5.0",
+]
+
+[project.scripts]
+ai-devops = "ai_devops.main:cli"
+
+[project.urls]
+Homepage = "https://github.com/behicof/-Implement-AI-DevOps-Assistant-Suite"
+Documentation = "https://github.com/behicof/-Implement-AI-DevOps-Assistant-Suite#readme"
+Repository = "https://github.com/behicof/-Implement-AI-DevOps-Assistant-Suite"
+
+[tool.setuptools.packages.find]
+include = ["ai_devops*"]
+
+[tool.black]
+line-length = 88
+target-version = ['py38']
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+  # directories
+  \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | build
+  | dist
+)/
+'''
+
+[tool.mypy]
+python_version = "3.8"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-v --strict-markers"
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "integration: marks tests as integration tests",
+]
