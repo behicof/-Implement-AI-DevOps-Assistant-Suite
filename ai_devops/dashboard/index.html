@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI DevOps Assistant Dashboard</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="/static/styles.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.js"></script>
+</head>
+<body>
+    <div id="app">
+        <!-- Header -->
+        <header class="header">
+            <div class="container">
+                <div class="header-content">
+                    <div class="logo">
+                        <i class="fas fa-robot"></i>
+                        <h1>AI DevOps Assistant</h1>
+                    </div>
+                    <div class="header-controls">
+                        <div class="status-indicator" id="connection-status">
+                            <i class="fas fa-circle"></i>
+                            <span>Connected</span>
+                        </div>
+                        <div class="theme-toggle" onclick="toggleTheme()">
+                            <i class="fas fa-moon"></i>
+                        </div>
+                        <div class="language-toggle" onclick="toggleLanguage()">
+                            <span id="lang-text">EN</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Navigation -->
+        <nav class="navigation">
+            <div class="container">
+                <ul class="nav-tabs">
+                    <li class="tab active" data-tab="overview">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span data-i18n="overview">Overview</span>
+                    </li>
+                    <li class="tab" data-tab="exchanges">
+                        <i class="fas fa-exchange-alt"></i>
+                        <span data-i18n="exchanges">Exchanges</span>
+                    </li>
+                    <li class="tab" data-tab="monitoring">
+                        <i class="fas fa-chart-line"></i>
+                        <span data-i18n="monitoring">Monitoring</span>
+                    </li>
+                    <li class="tab" data-tab="analysis">
+                        <i class="fas fa-code"></i>
+                        <span data-i18n="analysis">Code Analysis</span>
+                    </li>
+                    <li class="tab" data-tab="workflows">
+                        <i class="fab fa-github"></i>
+                        <span data-i18n="workflows">Workflows</span>
+                    </li>
+                    <li class="tab" data-tab="reports">
+                        <i class="fas fa-chart-bar"></i>
+                        <span data-i18n="reports">Reports</span>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="container">
+                <!-- Overview Tab -->
+                <div id="overview" class="tab-content active">
+                    <div class="dashboard-grid">
+                        <!-- Key Metrics -->
+                        <div class="card metrics-card">
+                            <div class="card-header">
+                                <h3 data-i18n="key_metrics">Key Metrics</h3>
+                            </div>
+                            <div class="card-content">
+                                <div class="metrics-grid">
+                                    <div class="metric">
+                                        <div class="metric-icon">
+                                            <i class="fas fa-exchange-alt"></i>
+                                        </div>
+                                        <div class="metric-info">
+                                            <div class="metric-value" id="connected-exchanges">0</div>
+                                            <div class="metric-label" data-i18n="connected_exchanges">Connected Exchanges</div>
+                                        </div>
+                                    </div>
+                                    <div class="metric">
+                                        <div class="metric-icon">
+                                            <i class="fas fa-code-branch"></i>
+                                        </div>
+                                        <div class="metric-info">
+                                            <div class="metric-value" id="active-workflows">0</div>
+                                            <div class="metric-label" data-i18n="active_workflows">Active Workflows</div>
+                                        </div>
+                                    </div>
+                                    <div class="metric">
+                                        <div class="metric-icon">
+                                            <i class="fas fa-chart-line"></i>
+                                        </div>
+                                        <div class="metric-info">
+                                            <div class="metric-value" id="avg-response-time">0ms</div>
+                                            <div class="metric-label" data-i18n="avg_response_time">Avg Response Time</div>
+                                        </div>
+                                    </div>
+                                    <div class="metric">
+                                        <div class="metric-icon">
+                                            <i class="fas fa-exclamation-triangle"></i>
+                                        </div>
+                                        <div class="metric-info">
+                                            <div class="metric-value" id="active-alerts">0</div>
+                                            <div class="metric-label" data-i18n="active_alerts">Active Alerts</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Price Chart -->
+                        <div class="card chart-card">
+                            <div class="card-header">
+                                <h3 data-i18n="price_trends">Price Trends</h3>
+                                <div class="chart-controls">
+                                    <select id="price-symbol">
+                                        <option value="BTC/USDT">BTC/USDT</option>
+                                        <option value="ETH/USDT">ETH/USDT</option>
+                                        <option value="BTC/IRT">BTC/IRT</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="card-content">
+                                <canvas id="price-chart"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- Exchange Status -->
+                        <div class="card status-card">
+                            <div class="card-header">
+                                <h3 data-i18n="exchange_status">Exchange Status</h3>
+                            </div>
+                            <div class="card-content" id="exchange-status-list">
+                                <!-- Exchange status items will be populated here -->
+                            </div>
+                        </div>
+
+                        <!-- Recent Activity -->
+                        <div class="card activity-card">
+                            <div class="card-header">
+                                <h3 data-i18n="recent_activity">Recent Activity</h3>
+                            </div>
+                            <div class="card-content">
+                                <div class="activity-list" id="activity-list">
+                                    <!-- Activity items will be populated here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Exchanges Tab -->
+                <div id="exchanges" class="tab-content">
+                    <div class="exchanges-header">
+                        <h2 data-i18n="cryptocurrency_exchanges">Cryptocurrency Exchanges</h2>
+                        <button class="btn btn-primary" onclick="refreshExchanges()">
+                            <i class="fas fa-sync"></i>
+                            <span data-i18n="refresh">Refresh</span>
+                        </button>
+                    </div>
+                    
+                    <div class="exchanges-grid" id="exchanges-grid">
+                        <!-- Exchange cards will be populated here -->
+                    </div>
+                </div>
+
+                <!-- Monitoring Tab -->
+                <div id="monitoring" class="tab-content">
+                    <div class="monitoring-controls">
+                        <h2 data-i18n="real_time_monitoring">Real-time Monitoring</h2>
+                        <div class="controls">
+                            <button class="btn btn-success" id="start-monitoring" onclick="startMonitoring()">
+                                <i class="fas fa-play"></i>
+                                <span data-i18n="start">Start</span>
+                            </button>
+                            <button class="btn btn-danger" id="stop-monitoring" onclick="stopMonitoring()" disabled>
+                                <i class="fas fa-stop"></i>
+                                <span data-i18n="stop">Stop</span>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="monitoring-grid">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 data-i18n="price_alerts">Price Alerts</h3>
+                            </div>
+                            <div class="card-content" id="price-alerts">
+                                <!-- Price alerts will be populated here -->
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 data-i18n="system_health">System Health</h3>
+                            </div>
+                            <div class="card-content" id="system-health">
+                                <!-- System health metrics will be populated here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Analysis Tab -->
+                <div id="analysis" class="tab-content">
+                    <div class="analysis-header">
+                        <h2 data-i18n="code_analysis">AI Code Analysis</h2>
+                        <button class="btn btn-primary" onclick="runAnalysis()">
+                            <i class="fas fa-play"></i>
+                            <span data-i18n="run_analysis">Run Analysis</span>
+                        </button>
+                    </div>
+                    
+                    <div class="analysis-content" id="analysis-results">
+                        <div class="empty-state">
+                            <i class="fas fa-code"></i>
+                            <p data-i18n="no_analysis_results">No analysis results yet. Run an analysis to see results here.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Workflows Tab -->
+                <div id="workflows" class="tab-content">
+                    <div class="workflows-header">
+                        <h2 data-i18n="github_workflows">GitHub Workflows</h2>
+                        <input type="text" id="repository-input" placeholder="owner/repository">
+                        <button class="btn btn-primary" onclick="loadWorkflows()">
+                            <i class="fas fa-search"></i>
+                            <span data-i18n="load">Load</span>
+                        </button>
+                    </div>
+                    
+                    <div class="workflows-content" id="workflows-list">
+                        <div class="empty-state">
+                            <i class="fab fa-github"></i>
+                            <p data-i18n="no_workflows">Enter a repository name to load workflows.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reports Tab -->
+                <div id="reports" class="tab-content">
+                    <div class="reports-header">
+                        <h2 data-i18n="reports">Reports</h2>
+                        <div class="report-controls">
+                            <select id="report-period">
+                                <option value="daily" data-i18n="daily">Daily</option>
+                                <option value="weekly" data-i18n="weekly">Weekly</option>
+                                <option value="monthly" data-i18n="monthly">Monthly</option>
+                            </select>
+                            <select id="report-format">
+                                <option value="json">JSON</option>
+                                <option value="html">HTML</option>
+                                <option value="pdf">PDF</option>
+                            </select>
+                            <button class="btn btn-primary" onclick="generateReport()">
+                                <i class="fas fa-file-alt"></i>
+                                <span data-i18n="generate">Generate</span>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="reports-content" id="reports-list">
+                        <div class="empty-state">
+                            <i class="fas fa-chart-bar"></i>
+                            <p data-i18n="no_reports">No reports generated yet.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="loading-overlay">
+        <div class="loading-spinner">
+            <i class="fas fa-spinner fa-spin"></i>
+            <p data-i18n="loading">Loading...</p>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="/static/app.js"></script>
+</body>
+</html>
